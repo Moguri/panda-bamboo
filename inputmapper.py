@@ -2,9 +2,9 @@ from direct.showbase.DirectObject import DirectObject
 
 
 class InputMapper(DirectObject):
-
-    def __init__(self, config, verbose=False):
+    def __init__(self, config, verbose=False, remap_keys=True):
         self.verbose = verbose
+        self.remap_keys = remap_keys
 
         # Setup input map
         self.input_map = {}
@@ -17,6 +17,9 @@ class InputMapper(DirectObject):
                     event = ln[0].strip()
 
                     for trigger in triggers:
+                        if self.remap_keys:
+                            trigger = str(base.win.get_keyboard_map().get_mapped_button(trigger))
+
                         if trigger in self.input_map:
                             self.input_map[trigger].append(event)
                         else:
