@@ -41,3 +41,16 @@ class InputMapper(DirectObject):
             if self.verbose:
                 print('InputMapper sending:', i + suffix)
             messenger.send(i + suffix)
+
+    def get_mapped_trigger_labels(self, event):
+        triggers = [key for key,value in self.input_map.items() if event in value]
+
+        retval = []
+        keymap = base.win.get_keyboard_map()
+        for trigger in triggers:
+            label = keymap.get_mapped_button_label(trigger)
+            if not label:
+                label = trigger
+            retval.append(label)
+
+        return retval
