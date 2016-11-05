@@ -2,7 +2,6 @@ import os
 
 import panda3d.core as p3d
 from direct.filter.FilterManager import FilterManager
-from direct.filter.CommonFilters import CommonFilters
 
 
 shader_dir = os.path.join(os.path.dirname(__file__), 'shaders') + '/'
