@@ -1,13 +1,14 @@
 #version 130
-const int light_count = 4;
+#ifndef MAX_LIGHTS
+#define MAX_LIGHTS 16
+#endif
+
 
 uniform sampler2D p3d_Texture0;
-
 uniform struct p3d_LightSourceParameters {
     vec4 color;
     vec4 position;
-} p3d_LightSource[light_count];
-
+} p3d_LightSource[MAX_LIGHTS];
 
 in vec4 vertex;
 in vec3 normal;
@@ -41,13 +42,13 @@ void main() {
     vec3 base_color = texture(p3d_Texture0, texcoord).rgb;
     vec3 N = normalize(normal);
     vec3 V = vertex.xyz;
-    float roughness = 0.0;
+    float roughness = 0.4;
     float metallic = 0.0;
     vec3 diffuse = vec3(0.0);
     vec3 spec = vec3(0.0);
     vec3 cspec = vec3(0.04);
 
-    for (int i = 0; i < light_count; ++i) {
+    for (int i = 0; i < MAX_LIGHTS; ++i) {
         vec3 L = p3d_LightSource[i].position.xyz - vertex.xyz;
         float dist = length(L);
         L = normalize(L);
