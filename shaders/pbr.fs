@@ -8,11 +8,14 @@ uniform sampler2D p3d_Texture0;
 uniform struct p3d_LightSourceParameters {
     vec4 color;
     vec4 position;
+
+    sampler2DShadow shadowMap;
 } p3d_LightSource[MAX_LIGHTS];
 
 in vec4 vertex;
 in vec3 normal;
 in vec2 texcoord;
+in vec4 shadowcoord[MAX_LIGHTS];
 
 out vec4 o_color;
 
@@ -50,7 +53,7 @@ void main() {
     vec3 spec = vec3(0.0);
     vec3 cspec = vec3(0.04);
 
-    for (int i = 0; i < MAX_LIGHTS; ++i) {
+    for (int i = 0; i < p3d_LightSource.length(); ++i) {
         vec3 L;
         float attenuation;
         if (p3d_LightSource[i].position.w == 0.0) {
@@ -68,9 +71,15 @@ void main() {
         L = normalize(L);
         vec3 H = normalize(L + V);
         float lambert = max(dot(N, L), 0.0);
-        vec3 clight = attenuation * lambert * p3d_LightSource[i].color.rgb;
 
+        // Shadows
+        float shadow = textureProj(p3d_LightSource[i].shadowMap, shadowcoord[i]);
+
+        // Diffuse
+        vec3 clight = attenuation * lambert * p3d_LightSource[i].color.rgb * shadow;
         diffuse += clight;
+
+        // Spec
         vec3 tspec = fresnel(cspec, L, H);
         tspec *= clight;
         tspec *= distf(roughness, N, H);
