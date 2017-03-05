@@ -18,7 +18,9 @@ class InputMapper(DirectObject):
 
                     for trigger in triggers:
                         if self.remap_keys:
-                            trigger = str(base.win.get_keyboard_map().get_mapped_button(trigger))
+                            remapped = str(base.win.get_keyboard_map().get_mapped_button(trigger))
+                            if remapped != 'none':
+                                trigger = remapped
 
                         if trigger in self.input_map:
                             self.input_map[trigger].append(event)
