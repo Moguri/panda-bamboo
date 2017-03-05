@@ -51,12 +51,23 @@ void main() {
     vec3 cspec = vec3(0.04);
 
     for (int i = 0; i < MAX_LIGHTS; ++i) {
-        vec3 L = p3d_LightSource[i].position.xyz - vertex.xyz;
-        float dist = length(L);
+        vec3 L;
+        float attenuation;
+        if (p3d_LightSource[i].position.w == 0.0) {
+            // Directional light
+            L = p3d_LightSource[i].position.xyz;
+            attenuation = 1.0;
+        }
+        else {
+            // Point light
+            float dist;
+            L = p3d_LightSource[i].position.xyz - vertex.xyz;
+            dist = length(L);
+            attenuation = 30.0 / (30.0 + dist * dist);
+        }
         L = normalize(L);
         vec3 H = normalize(L + V);
         float lambert = max(dot(N, L), 0.0);
-        float attenuation = 30.0 / (30.0 + dist * dist);
         vec3 clight = attenuation * lambert * p3d_LightSource[i].color.rgb;
 
         diffuse += clight;
