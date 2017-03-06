@@ -42,7 +42,7 @@ class InputMapper(DirectObject):
         for i in events:
             if self.verbose:
                 print('InputMapper sending:', i + suffix)
-            messenger.send(i + suffix)
+            base.messenger.send(i + suffix)
 
     def get_mapped_trigger_labels(self, event):
         triggers = [key for key,value in self.input_map.items() if event in value]
