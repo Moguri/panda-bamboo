@@ -2,19 +2,19 @@ from direct.showbase.DirectObject import DirectObject
 
 
 class InputMapper(DirectObject):
-    def __init__(self, config, verbose=False, remap_keys=True):
+    def __init__(self, config_path, verbose=False, remap_keys=True):
         self.verbose = verbose
         self.remap_keys = remap_keys
 
         # Setup input map
         self.input_map = {}
-        with open(config) as f:
-            for ln in f.readlines():
-                ln = ln.strip()
-                if ln and not ln.startswith(';'):
-                    ln = ln.split('=')
-                    triggers = [i.strip() for i in ln[1].strip().split(',')]
-                    event = ln[0].strip()
+        with open(config_path) as config_file:
+            for line in config_file.readlines():
+                line = line.strip()
+                if line and not line.startswith(';'):
+                    line = line.split('=')
+                    triggers = [i.strip() for i in line[1].strip().split(',')]
+                    event = line[0].strip()
 
                     for trigger in triggers:
                         if self.remap_keys:
@@ -45,7 +45,7 @@ class InputMapper(DirectObject):
             base.messenger.send(i + suffix)
 
     def get_mapped_trigger_labels(self, event):
-        triggers = [key for key,value in self.input_map.items() if event in value]
+        triggers = [key for key, value in self.input_map.items() if event in value]
 
         retval = []
         keymap = base.win.get_keyboard_map()
