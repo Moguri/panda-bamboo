@@ -8,6 +8,7 @@ uniform sampler2D p3d_Texture0;
 uniform struct p3d_LightSourceParameters {
     vec4 color;
     vec4 position;
+    mat4 shadowViewMatrix;
 
     sampler2DShadow shadowMap;
 } p3d_LightSource[MAX_LIGHTS];
@@ -73,7 +74,10 @@ void main() {
         float lambert = max(dot(N, L), 0.0);
 
         // Shadows
-        float shadow = textureProj(p3d_LightSource[i].shadowMap, shadowcoord[i]);
+        float shadow = textureProj(
+            p3d_LightSource[i].shadowMap,
+            p3d_LightSource[i].shadowViewMatrix * vertex
+        );
 
         // Diffuse
         vec3 clight = attenuation * lambert * p3d_LightSource[i].color.rgb * shadow;
