@@ -3,8 +3,10 @@ import os
 import panda3d.core as p3d
 from direct.filter.FilterManager import FilterManager
 
-
-shader_dir = os.path.join(os.path.dirname(__file__), 'shaders') + '/'
+if '__file__' in globals():
+    shader_dir = os.path.join(os.path.dirname(__file__), 'shaders') + '/'
+else:
+    shader_dir = os.path.join('bamboo', 'shaders') + '/'
 material_shader_sources = [shader_dir + 'common.vs', shader_dir + 'pbr.fs']
 post_shader_sources = [shader_dir + 'post.vs', shader_dir + 'post.fs']
 antialias_shader_sources = [shader_dir + 'post.vs', shader_dir + 'fxaa.fs']
