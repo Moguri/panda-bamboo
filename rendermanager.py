@@ -6,7 +6,8 @@ from direct.filter.FilterManager import FilterManager
 if '__file__' in globals():
     shader_dir = os.path.join(os.path.dirname(__file__), 'shaders') + '/'
 else:
-    shader_dir = os.path.join('bamboo', 'shaders') + '/'
+    import sys
+    shader_dir = os.path.join(os.path.dirname(sys.executable), 'bamboo', 'shaders') + '/'
 material_shader_sources = [shader_dir + 'common.vs', shader_dir + 'pbr.fs']
 post_shader_sources = [shader_dir + 'post.vs', shader_dir + 'post.fs']
 antialias_shader_sources = [shader_dir + 'post.vs', shader_dir + 'fxaa.fs']
